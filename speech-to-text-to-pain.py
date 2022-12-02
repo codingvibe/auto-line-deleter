@@ -34,12 +34,12 @@ BAD_WORDS = os.getenv("WORDS_LIST").split(',')
 
 def delete_random_line():
   all_lines = []
-  with open(INPUT_FILE,'r') as stream:
-    all_lines = stream.readlines()
+  with open(INPUT_FILE,'r') as input:
+    all_lines = input.readlines()
   if (len(all_lines) > 0) :
     removed_lines = sacrifice_line(all_lines, TORTURE_METHOD)
-    with open(INPUT_FILE,'w') as stream:
-      stream.write(''.join(removed_lines))
+    with open(INPUT_FILE,'w') as output:
+      output.write(''.join(removed_lines))
 
 def sacrifice_line(all_lines, method):
   if method == 'RANDOM':
