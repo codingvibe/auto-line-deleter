@@ -3,6 +3,7 @@ import base64
 import json
 import os
 import pyaudio
+import pyttsx3
 import random
 import re
 import websockets
@@ -10,6 +11,7 @@ from dotenv import load_dotenv
  
 load_dotenv()
 
+engine = pyttsx3.init()
 FRAMES_PER_BUFFER = 3200
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
@@ -94,9 +96,12 @@ async def send_receive():
                    if result['message_type'] == 'FinalTranscript':
                     already_deleted = False
                     line = re.sub(r'[^a-zA-Z0-9 ]', '', result['text'].lower())
+                    words = line.split()
                     print(line)
                     for bad_word in BAD_WORDS:
-                      if bad_word in line and not already_deleted:
+                      if bad_word in words and not already_deleted:
+                        engine.say("Uh oh, you said %s. Bye bye, line!" % bad_word)
+                        engine.runAndWait()
                         delete_random_line()
                         already_deleted = True
                except websockets.exceptions.ConnectionClosedError as e:
